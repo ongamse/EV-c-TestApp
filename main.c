@@ -419,11 +419,13 @@ void not_free_field_reassigned(Example_Struct *example_struct, char* buf) {
   example_struct->ptr = buf;
 }
 void bad1(Example_Struct *example_struct) {
-  void *x = NULL;
-  example_struct->foo = x;
-  free(x);
-}
-void *bad() {
+	void good1(Example_Struct *example_struct) {
+  	if (example_struct == NULL) {
+    	return;
+  	}
+  	example_struct->foo = NULL;
+	}
+
   void *x = NULL;
   if (cond)
     free(x);
@@ -450,3 +452,4 @@ int main(int argc,char **argv) {
   strcpy_bad(argumentInput, argv[1]);
   func_with_nesting_level_of_3(strlen(argv[1]), strlen(argv[2]))
 }
+
