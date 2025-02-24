@@ -6,6 +6,9 @@ name: Qwiet
 on:
   pull_request:
   workflow_dispatch:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron: '0 11 1 * *'
 
 jobs:
   NextGen-Static-Analysis:
@@ -21,7 +24,7 @@ jobs:
       id: extract_branch
           # the sl analyze command below needs to have app name specified and location of C/C++ files.
     - name: NextGen Static Analysis
-      run: ${GITHUB_WORKSPACE}/sl analyze --strict --wait --app QwietAI-C-GH --container 18fgsa/s3-resource --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --c --cpg .
+      run: ${GITHUB_WORKSPACE}/sl analyze --strict --wait --app QwietAI-C-GH --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --c .
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
         SHIFTLEFT_API_HOST: www.shiftleft.io
